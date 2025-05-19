@@ -1,3 +1,5 @@
+import Button from "../../ui/Button";
+
 function CreateUser() {
     return (
         <form>
@@ -11,7 +13,7 @@ function CreateUser() {
     className="input mb-8 w-72"
     />
     <div>
-        <button type="primary">Statrt ordering</button>
+        <Button type="primary">Statrt ordering</Button>
     </div>
 </form>
     )
