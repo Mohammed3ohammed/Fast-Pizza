@@ -1,4 +1,5 @@
-import CeateUser  from "";
+import CreateUser from "../features/user/CreateUser";
+
 function Home() {
     return (
       <div>
@@ -10,7 +11,7 @@ function Home() {
         </span>
       </h1>
 
-      <CeateUser />
+      <CreateUser />
     </div>
     )
 }
