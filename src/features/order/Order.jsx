@@ -39,7 +39,7 @@ function Order() {
                                     deliveryIn >= 0 
                                     ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
                                     : 'Order should have arrived'
-                                 }
+                                }
                                 </p>
                                 <p className="text-xs text-stone-500">
                                     (Estimated delivery: {formatDate(estimatedDelivery)})
@@ -57,7 +57,7 @@ function Order() {
                             </p>
                             {priority && (
                                 <p className="text-sm font-medium text-stone-600">
-                                     Price priority: {formatCurrency(priorityPrice)}
+                                    Price priority: {formatCurrency(priorityPrice)}
                                 </p>
                             )}
                             <p className="font-bold">
