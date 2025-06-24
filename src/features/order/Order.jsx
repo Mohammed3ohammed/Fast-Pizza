@@ -1,26 +1,29 @@
 import OrderItem from './OrderItem';
-
-import { useLoaderData } from 'react-router-dom';
+import { useFetcher, useLoaderData } from 'react-router-dom';
 import { getOrder } from '../../services/apiRestaurant';
-
 import {
   calcMinutesLeft,
   formatCurrency,
   formatDate,
 } from '../../utils/helpers';
+import { useEffect } from 'react';
 
 function Order() {
     const order = useLoaderData();
+      const fetcher = useFetcher();
     const {
         id, status, priority, priorityPrice, orderPrice, estimatedDelivery, cart,
     } = order;
-
     const deliveryIn = calcMinutesLeft(estimatedDelivery);
+    
+    useEffect(() => {
+            if (!fetcher.date && fetcher.state === 'idle') fetcher.load('/menu')
+    }, [fetcher])
     
     return (
             <div className="space-y-8 px-4 py-6">
                 <div className="flex flex-wrap items-center justify-between gap-6">
-                    <h2 className="twxt-xl font-semibold">Order #{id} status</h2>
+                    <h2 className="text-xl font-semibold">Order #{id} status</h2>
 
                     <div className="space-x-2">
                         {priority && (
@@ -48,7 +51,13 @@ function Order() {
 
                         <ul className="divide-stone-200 divide-y border-b border-t">
                                 {cart.map((item) => (
-                                    <OrderItem item={item} key={item.id} />
+                                    <OrderItem item={item} key={item.pizzaId} 
+                                        isLoadingIngredients={fetcher.state === 'loading'}
+                                        ingredients={
+                                            fetcher?.data?.find((el) => el.id === item.pizzaId)
+                                            ?.ingredients ?? []
+                                        }
+                                    />
                                 ))}
                         </ul>
                         <div className="space-y-2 bg-stone-200 px-6 py-5">
@@ -64,10 +73,15 @@ function Order() {
                                 To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
                             </p>
                         </div>
+
+                        {
+                            !priority && <UpdateOrder order={order} />
+                        }
             </div>
     )
 }
-    export async function loader({ params }) {
+
+export async function loader({ params }) {
   const order = await getOrder(params.orderId);
   return order;
 
